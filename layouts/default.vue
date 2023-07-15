@@ -2,7 +2,7 @@
   <div>
     <header>
       <nav class="flex items-center justify-center">
-        <img src="../assets/logo.jpg" alt="">
+        <img src="logo.jpg" alt="">
         <NuxtLink to="/">Home</NuxtLink>
         <NuxtLink to="/account">My account</NuxtLink>
       </nav>

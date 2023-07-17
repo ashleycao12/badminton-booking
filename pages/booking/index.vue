@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2> {{$t('account')}} page </h2>
+    <h2> {{$t('booking')}} page </h2>
   </div>
 </template>
 

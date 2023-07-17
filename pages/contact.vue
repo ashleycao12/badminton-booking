@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2> {{$t('account')}} page </h2>
+    <h2> {{ $t('contact') }} page </h2>
   </div>
 </template>
 
@@ -8,6 +8,4 @@
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

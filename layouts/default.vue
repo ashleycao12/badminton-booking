@@ -1,10 +1,19 @@
 <template>
   <div>
     <header>
-      <nav class="flex items-center justify-center">
-        <img src="logo.jpg" alt="">
-        <NuxtLink to="/">{{ $t('home') }}</NuxtLink>
-        <NuxtLink to="/account">{{ $t('account') }}</NuxtLink>
+      <nav class="flex flex-col md:flex-row items-center md:items-end md:px-10 py-2">
+        <div>
+          <img class="w-72" src="logo.jpg" alt="">
+        </div>
+        <div class="grow flex items-center justify-center"> <!-- Updated classes here -->
+          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/">{{ $t('home') }}</NuxtLink>
+          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/account">{{ $t('account') }}
+          </NuxtLink>
+          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/booking">{{ $t('booking') }}
+          </NuxtLink>
+          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/contact">{{ $t('contact') }}
+          </NuxtLink>
+        </div>
       </nav>
     </header>
   </div>
@@ -16,4 +25,8 @@
 <script setup lang="ts">
 </script>
 
-<style scoped></style>
+<style scoped>
+.router-link-exact-active {
+  background-color: rgb(226 232 240)
+}
+</style>

@@ -1,28 +1,31 @@
 <template>
   <div>
     <header>
-      <nav class="flex flex-col md:flex-row items-center md:items-end md:px-10 py-2">
-        <div>
-          <img class="w-72" src="logo.jpg" alt="">
+      <div class="flex flex-col md:flex-row items-center md:items-end md:px-10 py-2">
+        <img class="w-72" src="logo.jpg" alt="">
+        <div class="grow flex justify-end">
+          <nav class="">
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/')">{{ $t('home') }}</NuxtLink>
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/account')">{{ $t('account') }}</NuxtLink>
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/booking')">{{ $t('booking') }}</NuxtLink>
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/contact')">{{ $t('contact') }}</NuxtLink>
+          </nav>
+          <LangSwitcher/>
         </div>
-        <div class="grow flex items-center justify-center"> <!-- Updated classes here -->
-          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/">{{ $t('home') }}</NuxtLink>
-          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/account">{{ $t('account') }}
-          </NuxtLink>
-          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/booking">{{ $t('booking') }}
-          </NuxtLink>
-          <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" to="/contact">{{ $t('contact') }}
-          </NuxtLink>
-        </div>
-      </nav>
+      </div>
     </header>
   </div>
   <div>
     <slot />
   </div>
+
+
+
+
 </template>
 
 <script setup lang="ts">
+  const localPath = useLocalePath()
 </script>
 
 <style scoped>

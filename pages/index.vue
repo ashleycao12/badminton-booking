@@ -8,9 +8,6 @@
       placeat fuga. Iure
       ex rerum odit dignissimos doloremque quis. Sit quo dolores voluptatibus rem illo cupiditate.
     </p>
-    <p>
-      <ContentDoc />
-    </p>
   </div>
 </template>
 

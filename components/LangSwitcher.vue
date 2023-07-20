@@ -23,7 +23,6 @@
   const flagPath:string = computed(() => {
     return locale.value === 'vi-VN' ? "vietnam.png" : "united-kingdom.png"
   })
-  console.log(locale.value);
 </script>
 
 <style scoped>

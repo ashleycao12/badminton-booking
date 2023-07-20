@@ -21,7 +21,7 @@
     set: (value) => {setLocale(value)}
   });
   const flagPath:string = computed(() => {
-    return locale.value === 'vi-VN' ? "vietnam.png" : "united-kingdom.png"
+    return locale.value === 'vi-VN' ? "/vietnam.png" : "/united-kingdom.png"
   })
 </script>
 

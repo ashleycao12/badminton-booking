@@ -21,3 +21,9 @@ logs
 .env
 .env.*
 !.env.example
+
+#firebase hosting stuff
+.firebase
+.github
+firebase.json
+.firebaserc

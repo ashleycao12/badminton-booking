@@ -32,5 +32,9 @@ export default defineNuxtConfig({
       }
     ],
     defaultLocale: 'vi-VN',
+  },
+  ssr: true,
+  nitro: {
+    preset: 'firebase'
   }
 })

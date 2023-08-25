@@ -3,6 +3,12 @@
   "account": "Tài khoản",
   "booking": "Đặt sân",
   "contact": "Liên lạc",
-  "price": "Giá"
-
+  "price": "Giá",
+  "phone-number": "Số điện thoại",
+  "sign-in": "Đăng nhập",
+  "sign-out": "Đăng xuất",
+  "sign-in-with-Facebook": "Đăng nhập bằng Facebook",
+  "verify": "Xác nhận",
+  "code": "Mã xác nhận",
+  "verification-code-instruction": "Nhập mã xác nhận gồm 6 chữ số vừa được gửi đến số điện thoại của bạn vào ô bên dưới, rồi ấn nút Xác nhận"
 }

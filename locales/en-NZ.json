@@ -1,6 +1,1 @@
-{
-  "home": "Home",
-  "account": "Account",
-  "booking": "Booking",
-  "contact": "Contact"
-}
+{"home":"Home","account":"Account","booking":"Booking","contact":"Contact","phone-number":"Phone number","story":"bla bla bla","price":"Price","sign-in":"Sign in","verify":"Verify","code":"Code","verification-code-instruction":"Verification code-instruction","sign-in-with-Facebook":"Sign in-with-Facebook","sign-out":"Sign out"}

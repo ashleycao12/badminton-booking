@@ -6,11 +6,10 @@
         <div class="grow flex justify-end">
           <nav class="">
             <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/')">{{ $t('home') }}</NuxtLink>
-            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/account')">{{ $t('account') }}</NuxtLink>
             <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/booking')">{{ $t('booking') }}</NuxtLink>
             <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/contact')">{{ $t('contact') }}</NuxtLink>
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/account')">{{ $t('account') }}</NuxtLink>
           </nav>
-          <LangSwitcher/>
         </div>
       </div>
     </header>

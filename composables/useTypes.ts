@@ -1,4 +1,6 @@
 export type booking = {
-  dateTime: Date,
-  userId: string
+  startTime: Date,
+  endTime:Date,
+  userId: string,
+  court:number
 }

@@ -10,5 +10,18 @@
   "sign-in-with-Facebook": "Đăng nhập bằng Facebook",
   "verify": "Xác nhận",
   "code": "Mã xác nhận",
-  "verification-code-instruction": "Nhập mã xác nhận gồm 6 chữ số vừa được gửi đến số điện thoại của bạn vào ô bên dưới, rồi ấn nút Xác nhận"
+  "verification-code-instruction": "Nhập mã xác nhận gồm 6 chữ số vừa được gửi đến số điện thoại của bạn vào ô bên dưới, rồi ấn nút Xác nhận",
+  "book": "Đặt",
+  "from": "Từ",
+  "to": "Đến",
+  "date": "Ngày",
+  "court": "Sân",
+  "select": "OK",
+  "cancel": "Hủy",
+  "playing time": "Thời gian chơi",
+  "hour": "tiếng",
+  "minute": "phút",
+  "my bookings": "Giờ sân của tui",
+  "others bookings": "Giờ sân của người khác",
+  "available slot": "Sân trống"
 }

@@ -1,7 +1,4 @@
 <template>
-  <!-- <div>
-      <button id="fb-sign-in-btn" class="submit bg-sky-600 text-white py-2 px-4 rounded-md" @click="handleFacebookSign">{{ $t('sign-in-with-Facebook') }}</button>
-  </div> -->
   <div class="bg-slate-200">
     <form @submit.prevent="handleSubmit" class=" mt-24 flex flex-col items-center gap-5 p-5">
       <div>
@@ -44,15 +41,7 @@
     const user = phoneSignIn(code.value)
     console.log(user);
   }
-  
-    // function handleFacebookSign() {
-    //   try {
-    //     const result = FacebookSignIn()
-    //     console.log(result);
-    //   } catch (err) {
-    //     console.log(err);      
-    //   }
-    // }
+
 </script>
 
 <style scoped>

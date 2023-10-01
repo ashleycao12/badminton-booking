@@ -1,12 +1,12 @@
 <template>
-  <div class="pt-10 flex justify-center">
+  <div class="pt-10 flex justify-center flex-col md:flex-row">
     <div>
       <div class="flex flex-row justify-center gap-2">
         <button @click="changeDay(-1)"> ◀ </button>
         <div class="text-center bg-white border px-2 py-1">{{ day.toLocaleDateString(locale, {weekday:'long', month:'numeric', day:'numeric'}) }}</div>
         <button @click="changeDay(1)"> ▶ </button>
       </div>
-      <table class="border bg-white">
+      <table class="border bg-white mx-auto">
         <tbody>
           <tr>
             <th class=" border"></th>
@@ -17,7 +17,7 @@
           <tr v-for="hour in hours" class="h-10" ref="hourRefs">
             <td class="px-3 block leading-none text-sm border-none" > {{ hour }}:00 </td>
             <td v-for="court in courts" class="border relative">
-              <div v-if="timetable.has(key(hour, court))" class=" w-full bg-red-300 absolute left-0" :style="getBookingDivStyle(timetable.get(key(hour, court)))">
+              <div v-if="timetable.has(key(hour, court))" class=" w-full bg-red-300 absolute left-0" :class="getBookingColourClass(timetable.get(key(hour,court)))" :style="getBookingDivStyle(timetable.get(key(hour, court)))">
                 &nbsp;
               </div>
             </td>
@@ -25,8 +25,28 @@
         </tbody>
       </table>
   </div>
-    <div class="p-5 ml-10 hidden lg:inline">
-      <button class="px-4 py-2 text-xl bg-blue-200 rounded-sm hover:bg-blue-400" @click="handleBook">{{$t('book')}}</button>
+    <div class="p-5 ml-10 flex flex-col gap-2 mt-5">
+      <!-- timetable legends -->
+      <div>
+        <div class="w-5 h-5 bg-white inline-block mr-2 border border-gray-400">
+          &nbsp;
+        </div>
+        <span>{{ $t('available slot') }}</span>
+      </div>
+      <div>
+        <div class="w-5 h-5 bg-red-300 inline-block mr-2">
+          &nbsp;
+        </div>
+        <span>{{ $t('others bookings') }}</span>
+      </div>
+      <div>
+        <div class="w-5 h-5 bg-blue-300 inline-block mr-2">
+          &nbsp;
+        </div>
+        <span>{{ $t('my bookings') }}</span>
+      </div>
+
+      <button class="px-4 py-2 text-xl bg-blue-200 rounded-sm hover:bg-blue-400 mt-5" @click="handleBook">{{$t('book')}}</button>
     </div>
   </div>
 <BookingForm v-if="showBookingForm" @closeForm="closeBookingForm"/>
@@ -73,7 +93,7 @@
       return
     } 
 
-    console.log('login');
+    console.log('have logged in, id: ', firebaseUser.value.uid);
     showBookingForm.value = true
   }
 
@@ -81,10 +101,8 @@
     showBookingForm.value = false
   }
 
-  watch(day, async newDay => {
-    console.log(newDay);
-    bookings.value = await getBookingsByDate(newDay);
-    console.log(bookings);
+  watch(day, newDay => {
+    bookings.value = getBookingsByDate(newDay);
     populateTimetable()
   }, {immediate:true})
 
@@ -96,11 +114,17 @@
     }
 
     const top = height * booking.startTime.getMinutes()/60
-    console.log(height, top);
     return {
       height: `${height}px`,
       top: `${top}px`,
     }
+  }
+
+  function getBookingColourClass (booking) {
+    if (booking.userId === firebaseUser.value.uid){
+      return "bg-blue-300"
+    }
+    return ""
   }
   
   //function to stringify hour and court number as key for timetable map because array is reference type

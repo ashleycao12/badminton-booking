@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class=" bg-white shadow-lg">
     <header>
       <div class="flex flex-col md:flex-row items-center md:items-end md:px-10 py-2">
         <img class="w-72" src="/logo.jpg" alt="">
@@ -15,7 +15,7 @@
     </header>
   </div>
   <div>
-    <slot />
+    <slot/>
   </div>
 
 

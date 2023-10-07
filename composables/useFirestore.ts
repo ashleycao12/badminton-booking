@@ -33,7 +33,8 @@ export async function getBookings() {
       startTime: new Date(doc.data().startTime.seconds*1000),
       endTime: new Date(doc.data().endTime.seconds*1000),
       userId: doc.data().userId,
-      court: doc.data().court
+      court: doc.data().court,
+      createdAt: doc.data().createdAt
     })
   });
   return result

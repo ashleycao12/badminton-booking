@@ -23,5 +23,7 @@
   "minute": "phút",
   "my bookings": "Giờ sân của tui",
   "others bookings": "Giờ sân của người khác",
-  "available slot": "Sân trống"
+  "available time": "Giờ sân trống",
+  "please select a time": "Làm ơn chọn giờ bắt đầu chơi",
+  "start time": "Giờ bắt đầu"
 }

@@ -2,9 +2,9 @@
   <div class="pt-10 flex justify-center flex-col md:flex-row">
     <div>
       <div class="flex flex-row justify-center gap-2">
-        <button @click="changeDay(-1)"> ◀ </button>
-        <div class="text-center bg-white border px-2 py-1">{{ day.toLocaleDateString(locale, {weekday:'long', month:'numeric', day:'numeric'}) }}</div>
-        <button @click="changeDay(1)"> ▶ </button>
+        <button @click="changeDate(-1)" :disabled="isSameDate(date, new Date())"> ◀ </button>
+        <div class="text-center bg-white border px-2 py-1">{{ date.toLocaleDateString(locale, {weekday:'long', month:'numeric', day:'numeric'}) }}</div>
+        <button @click="changeDate(1)"> ▶ </button>
       </div>
       <table class="border bg-white mx-auto">
         <tbody>
@@ -17,7 +17,7 @@
           <tr v-for="hour in hours" class="h-10" ref="hourRefs">
             <td class="px-3 block leading-none text-sm border-none" > {{ hour }}:00 </td>
             <td v-for="court in courts" class="border relative">
-              <div v-if="timetable.has(key(hour, court))" class=" w-full bg-red-300 absolute left-0" :class="getBookingColourClass(timetable.get(key(hour,court)))" :style="getBookingDivStyle(timetable.get(key(hour, court)))">
+              <div v-if="timetable.has(key(hour, court))" class=" w-full absolute left-0" :class="getBookingColourClass(timetable.get(key(hour,court)))" :style="getBookingDivStyle(timetable.get(key(hour, court)))">
                 &nbsp;
               </div>
             </td>
@@ -31,7 +31,7 @@
         <div class="w-5 h-5 bg-white inline-block mr-2 border border-gray-400">
           &nbsp;
         </div>
-        <span>{{ $t('available slot') }}</span>
+        <span>{{ $t('available time') }}</span>
       </div>
       <div>
         <div class="w-5 h-5 bg-red-300 inline-block mr-2">
@@ -56,7 +56,7 @@
   const firebaseUser = useFirebaseUser()
   const {locale} = useI18n()
   const hours: number[] = getHours()  
-  const day = ref(new Date())
+  const date = ref(new Date())
   const timetable = ref(new Map())
   const bookings = ref([{startTime: new Date(0,0,0,0), endTime:new Date(0,0,0,0), userId: ''}])
   const hourRefs = ref([])
@@ -70,11 +70,11 @@
     return hours
   }
 
-  function changeDay(changeValue:number) {
-    const d = day.value.getDate() + changeValue
-    const m = day.value.getMonth()
-    const y = day.value.getFullYear()
-    day.value = new Date(y,m,d)
+  function changeDate(changeValue:number) {
+    const d = date.value.getDate() + changeValue
+    const m = date.value.getMonth()
+    const y = date.value.getFullYear()
+    date.value = new Date(y,m,d)
   }
 
   function populateTimetable () {
@@ -101,10 +101,10 @@
     showBookingForm.value = false
   }
 
-  watch(day, newDay => {
-    bookings.value = getBookingsByDate(newDay);
+  watchEffect(()=>{
+    bookings.value = getBookingsByDate(date.value);
     populateTimetable()
-  }, {immediate:true})
+  })
 
   function getBookingDivStyle(booking) {
     const bookingLengthInHours = (booking.endTime-booking.startTime)/3600000
@@ -124,7 +124,7 @@
     if (booking.userId === firebaseUser.value.uid){
       return "bg-blue-300"
     }
-    return ""
+    return "bg-red-300"
   }
   
   //function to stringify hour and court number as key for timetable map because array is reference type

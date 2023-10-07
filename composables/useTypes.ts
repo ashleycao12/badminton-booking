@@ -2,5 +2,6 @@ export type booking = {
   startTime: Date,
   endTime:Date,
   userId: string,
-  court:number
+  court:number,
+  createdAt: Date
 }

@@ -2,20 +2,25 @@
   <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
     <div class="bg-white p-10 relative">
       <form @submit.prevent="handleSubmit" >
+        <p v-if="showErrMsg" class="text-red-500 italic">{{ $t('please select a time') }}</p>
 
-          <!-- <label for="date">{{ $t('date') }}:</label> -->
-          <DatePicker v-model="selectedDate" id="date" :format-locale="formatLocale" format="dd/MM/yyyy" month-name-format="long" class="" :min-date="new Date()" :select-text="$t('select')" :cancel-text="$t('cancel')"/>
+          <!-- Date Selection -->
+        <DatePicker class="my-4" v-model="selectedDate" id="date" :format-locale="formatLocale" format="dd/MM/yyyy" month-name-format="long" :min-date="new Date()" :max-date="dateOffset(new Date(), maxFutureDays)" :select-text="$t('select')" :cancel-text="$t('cancel')" :enable-time-picker="false"/>
 
-  
-        <label for="playingTime">{{ $t('playing time') }}:</label>
-        <select name="playingTime" v-model="selectedPlayingTime">
-          <option v-for="time in allowedPlayingTime" :value="time">
-            <span>{{ Math.floor(time) }} {{ $t('hour') }}</span>
-            <span v-if="time % 1 > 0"> 30 {{ $t('minute') }} </span>
-          </option>
-        </select>
+        <!-- Duriation selection -->
+        <div class="my-4">
+          <label for="playingTime">{{ $t('playing time') }}:</label>
+          <select name="playingTime" v-model="selectedPlayingTime" class="border mx-2 cursor-pointer">
+            <option v-for="time in allowedPlayingTime" :value="time">
+              <span>{{ Math.floor(time) }} {{ $t('hour') }}</span>
+              <span v-if="time % 1 > 0"> 30 {{ $t('minute') }} </span>
+            </option>
+          </select>
+        </div>
 
-        <div class="grid grid-cols-6 gap-2">
+        <!-- Start time selection -->
+        <p>{{ $t('start time') }}:</p>
+        <div class="grid grid-cols-6 gap-2 my-2">
           <div v-for="hour in validStartHour" @click="handleHourSelection(hour)" class="p-1 bg-slate-200 text-center hover:bg-slate-400 flex cursor-pointer" :class="getHourStyle(hour)">
             {{Math.floor(hour)}}
             <span v-if="hour % 1 > 0">:30</span>
@@ -27,7 +32,7 @@
 
         </div>
   
-        <button class="px-2 py-1 bg-blue-200 rounded-sm hover:bg-blue-400">{{$t('book')}}</button>
+        <button class="px-4 py-1 bg-blue-200 rounded-sm hover:bg-blue-400 float-right">{{$t('book')}}</button>
       </form>
       <button @click="closeForm" class="absolute top-0 right-0 p-1">&#10006;</button>
     </div>
@@ -53,6 +58,7 @@
   const bookings = ref([])
   const selectedPlayingTime = ref(1)
   const allowedPlayingTime = [1, 1.5, 2, 2.5, 3, 3.5, 4]
+  const showErrMsg = ref(false)
   
   function getAllStartHour(){
     const result = []
@@ -65,6 +71,11 @@
 
   function getValidStartTime(){
     const result:number[] = []
+
+    if (selectedDate.value === null) {
+      return result
+    }
+
     defaultCourt.value = new Map()
 
     // Check all 4 courts to there is any available time with the selected length of each given start time options
@@ -95,18 +106,27 @@
         break
       }
     }
-    //TODO test with more bookings to see if available hours filtered correctly
     return result
   }
 
   async function handleSubmit() {
-    console.log('submit');
+    console.log(selectedDate.value, selectedHour.value);
+
+    if (selectedDate.value === null || selectedHour.value === 0) {
+      showErrMsg.value = true
+      return
+    }
+
+    showErrMsg.value = false
+
     await addBooking({
       startTime: getDateTime(selectedDate.value, selectedHour.value),
       endTime: getDateTime(selectedDate.value, selectedHour.value + selectedPlayingTime.value),
       court: defaultCourt.value.get(selectedHour.value),
-      userId: firebaseUser.value.uid
+      userId: firebaseUser.value.uid,
+      createdAt: new Date()
     });
+    await initBookings()
     console.log("booking added");
   }
 
@@ -123,7 +143,6 @@
 
   watch(selectedDate, newDate => {
     bookings.value = getBookingsByDate(newDate)
-    console.log(bookings.value);
     validStartHour.value = getValidStartTime()
   }, {immediate: true})
 

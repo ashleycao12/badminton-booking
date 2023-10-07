@@ -121,6 +121,9 @@
   }
 
   function getBookingColourClass (booking) {
+    if (firebaseUser.value === null)
+    return ""
+
     if (booking.userId === firebaseUser.value.uid){
       return "bg-blue-300"
     }

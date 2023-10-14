@@ -17,7 +17,7 @@
           <tr v-for="hour in hours" class="h-10" ref="hourRefs">
             <td class="px-3 block leading-none text-sm border-none" > {{ hour }}:00 </td>
             <td v-for="court in courts" class="border relative">
-              <div v-if="timetable.has(key(hour, court))" class=" w-full absolute left-0" :class="getBookingColourClass(timetable.get(key(hour,court)))" :style="getBookingDivStyle(timetable.get(key(hour, court)))">
+              <div v-if="timetable.has(key(hour, court))" class=" w-full absolute left-0 border-y" :class="getBookingColourClass(timetable.get(key(hour,court)))" :style="getBookingDivStyle(timetable.get(key(hour, court)))">
                 &nbsp;
               </div>
             </td>
@@ -107,7 +107,7 @@
   })
 
   function getBookingDivStyle(booking) {
-    const bookingLengthInHours = (booking.endTime-booking.startTime)/3600000
+    const bookingLengthInHours = (booking.endTime.getTime() - booking.startTime.getTime())/3600000
     let height = 0
     if (hourRefs.value[0]) {
       height = hourRefs.value[0].offsetHeight * bookingLengthInHours

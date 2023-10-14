@@ -25,5 +25,9 @@
   "others bookings": "Giờ sân của người khác",
   "available time": "Giờ sân trống",
   "please select a time": "Làm ơn chọn giờ bắt đầu chơi",
-  "start time": "Giờ bắt đầu"
+  "start time": "Giờ bắt đầu",
+  "manage bookings": "Quản lý giờ sân",
+  "yes": "Có",
+  "no": "Không",
+  "delete booking confirmation text": "Bạn có chắc là muốn hủy giờ sân này?"
 }

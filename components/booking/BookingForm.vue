@@ -1,42 +1,35 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-    <div class="bg-white p-10 relative">
-      <form @submit.prevent="handleSubmit" >
-        <p v-if="showErrMsg" class="text-red-500 italic">{{ $t('please select a time') }}</p>
+  <Popup>
+    <form @submit.prevent="handleSubmit" >
+      <p v-if="showErrMsg" class="text-red-500 italic">{{ $t('please select a time') }}</p>
 
-          <!-- Date Selection -->
-        <DatePicker class="my-4" v-model="selectedDate" id="date" :format-locale="formatLocale" format="dd/MM/yyyy" month-name-format="long" :min-date="new Date()" :max-date="dateOffset(new Date(), maxFutureDays)" :select-text="$t('select')" :cancel-text="$t('cancel')" :enable-time-picker="false"/>
+        <!-- Date Selection -->
+      <DatePicker class="my-4" v-model="selectedDate" id="date" :format-locale="formatLocale" format="dd/MM/yyyy" month-name-format="long" :min-date="new Date()" :max-date="dateOffset(new Date(), maxFutureDays)" :select-text="$t('select')" :cancel-text="$t('cancel')" :enable-time-picker="false"/>
 
-        <!-- Duriation selection -->
-        <div class="my-4">
-          <label for="playingTime">{{ $t('playing time') }}:</label>
-          <select name="playingTime" v-model="selectedPlayingTime" class="border mx-2 cursor-pointer">
-            <option v-for="time in allowedPlayingTime" :value="time">
-              <span>{{ Math.floor(time) }} {{ $t('hour') }}</span>
-              <span v-if="time % 1 > 0"> 30 {{ $t('minute') }} </span>
-            </option>
-          </select>
-        </div>
+      <!-- Duriation selection -->
+      <div class="my-4">
+        <label for="playingTime">{{ $t('playing time') }}:</label>
+        <select name="playingTime" v-model="selectedPlayingTime" class="border mx-2 cursor-pointer">
+          <option v-for="time in allowedPlayingTime" :value="time">
+            <span>{{ Math.floor(time) }} {{ $t('hour') }}</span>
+            <span v-if="time % 1 > 0"> 30 {{ $t('minute') }} </span>
+          </option>
+        </select>
+      </div>
 
         <!-- Start time selection -->
-        <p>{{ $t('start time') }}:</p>
-        <div class="grid grid-cols-6 gap-2 my-2">
-          <div v-for="hour in validStartHour" @click="handleHourSelection(hour)" class="p-1 bg-slate-200 text-center hover:bg-slate-400 flex cursor-pointer" :class="getHourStyle(hour)">
-            {{Math.floor(hour)}}
-            <span v-if="hour % 1 > 0">:30</span>
-            <span v-else>:00</span>
-          </div>
+      <p>{{ $t('start time') }}:</p>
+      <div class="grid grid-cols-6 gap-2 my-2">
+        <div v-for="hour in validStartHour" @click="handleHourSelection(hour)" class="p-1 bg-slate-200 text-center hover:bg-slate-400 flex cursor-pointer" :class="getHourStyle(hour)">
+          {{Math.floor(hour)}}
+          <span v-if="hour % 1 > 0">:30</span>
+          <span v-else>:00</span>
         </div>
-  
-        <div>
-
-        </div>
-  
-        <button class="px-4 py-1 bg-blue-200 rounded-sm hover:bg-blue-400 float-right">{{$t('book')}}</button>
-      </form>
-      <button @click="closeForm" class="absolute top-0 right-0 p-1">&#10006;</button>
-    </div>
-  </div>
+      </div>
+      <button class="px-4 py-1 bg-blue-200 rounded-sm hover:bg-blue-400 float-right">{{$t('book')}}</button>
+    </form>
+    <button @click="closeForm" class="absolute top-0 right-0 p-1">&#10006;</button>
+  </Popup>
 </template>
 
 <script lang="ts" setup>
@@ -126,7 +119,6 @@
       userId: firebaseUser.value.uid,
       createdAt: new Date()
     });
-    await initBookings()
     console.log("booking added");
   }
 

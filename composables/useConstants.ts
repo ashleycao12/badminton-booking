@@ -1,4 +1,4 @@
-export const openingTime = 12
+export const openingTime = 6
 
 export const closingTime = 22
 

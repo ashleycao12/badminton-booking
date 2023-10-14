@@ -41,11 +41,13 @@ export const signUserOut = async () => {
 export const initUser = () =>{
   const auth = getAuth()
   const firebaseUser = useFirebaseUser()
+  const authenticated = useAuthenticated()
   firebaseUser.value = auth.currentUser as any
+  authenticated.value = true
   
   onAuthStateChanged(auth, (user) => {
-    console.log(user);
     firebaseUser.value = user as any
+    authenticated.value = !authenticated.value
     console.log(firebaseUser.value);
   })
 }

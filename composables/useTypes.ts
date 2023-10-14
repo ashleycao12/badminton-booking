@@ -1,4 +1,5 @@
-export type booking = {
+export type TBooking = {
+  id: string,
   startTime: Date,
   endTime:Date,
   userId: string,

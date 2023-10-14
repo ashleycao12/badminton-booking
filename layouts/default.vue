@@ -5,10 +5,12 @@
         <img class="w-72" src="/logo.jpg" alt="">
         <div class="grow flex justify-end">
           <nav class="">
-            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/')">{{ $t('home') }}</NuxtLink>
-            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/booking')">{{ $t('booking') }}</NuxtLink>
-            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/contact')">{{ $t('contact') }}</NuxtLink>
-            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localPath('/account')">{{ $t('account') }}</NuxtLink>
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localePath('/')">{{ $t('home') }}</NuxtLink>
+            <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localePath('/booking')">{{ $t('booking') }}</NuxtLink>
+            
+            <NuxtLink v-if="!authenticated" class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localePath('/booking/mybookings')">{{ $t('manage bookings') }}</NuxtLink>
+            <NuxtLink v-if="authenticated" class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localePath('/login')">{{ $t('sign-in') }}</NuxtLink>
+            <NuxtLink v-else class="rounded-sm px-2 py-2 md:px-9 md:mx-3 md:text-2xl" :to="localePath('/account')">{{ $t('account') }}</NuxtLink>
           </nav>
         </div>
       </div>
@@ -18,13 +20,11 @@
     <slot/>
   </div>
 
-
-
-
 </template>
 
 <script setup lang="ts">
-  const localPath = useLocalePath()
+  const localePath = useLocalePath()
+  const authenticated = useAuthenticated()
 </script>
 
 <style scoped>

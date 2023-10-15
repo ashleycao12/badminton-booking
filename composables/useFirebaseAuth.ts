@@ -1,4 +1,4 @@
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
 
 // Phone number sign in
 export const sendCode = async (phoneNumber:string) => {
@@ -15,7 +15,7 @@ export const sendCode = async (phoneNumber:string) => {
     window.confirmation = confirmation;
   } catch (err) {
     console.log(err.message)
-    }
+  }
 }
 
 export const phoneSignIn = async (code) => {
@@ -26,6 +26,7 @@ export const phoneSignIn = async (code) => {
   } catch (err) {
     console.log(err)
     console.log(err.code === 'auth/invalid-verification-code')
+    //TODO add stuff for when code is incorrect
   }
 }
 
@@ -44,10 +45,22 @@ export const initUser = () =>{
   const authenticated = useAuthenticated()
   firebaseUser.value = auth.currentUser as any
   authenticated.value = true
+  console.log(firebaseUser.value);
   
   onAuthStateChanged(auth, (user) => {
     firebaseUser.value = user as any
     authenticated.value = !authenticated.value
     console.log(firebaseUser.value);
   })
+}
+
+export const addUserName = (name:string) => {
+  const auth = getAuth()
+  try {
+    updateProfile(auth.currentUser, {
+      displayName:name
+    })
+  } catch (err) {
+    console.log(err);
+  }
 }

@@ -1,15 +1,23 @@
-import {collection, getDocs, addDoc,  getFirestore, doc, deleteDoc } from "firebase/firestore"
+import {collection, getDocs, addDoc,  getFirestore, doc, deleteDoc, query, where } from "firebase/firestore"
 import { useAllBookings } from "./useState"
 import { TBooking } from "./useTypes"
 
 export async function initBookings() {
   const allBookings = useAllBookings()
+  if (allBookings.value.length !== 0) {
+    return
+  }
+  
   const db = getFirestore()
   const bookingRef = collection(db, "bookings")
   const result:TBooking[] = []
+  const today = new Date()
   
+  today.setHours(0,0,0,0)
+  const q= query(bookingRef, where("startTime", ">=", today))
+
   try {
-    const querySnapshot  = await getDocs(bookingRef)
+    const querySnapshot  = await getDocs(q)
     querySnapshot.forEach((doc) => {
       result.push({
         id: doc.id,
@@ -20,8 +28,8 @@ export async function initBookings() {
         createdAt: doc.data().createdAt
       })
     });
-    //TODO filter out past bookings
     allBookings.value = result
+    console.log(allBookings.value);
   } catch (error) {
     console.error("Can't init bookings. Error: ", error)
   }
@@ -77,8 +85,9 @@ export function getCurrentUserBookings(){
 export async function addBooking(booking:any){
   const db = getFirestore()
   try {
-    await addDoc(collection(db, "bookings"), booking)
-    await initBookings()
+    const docRef = await addDoc(collection(db, "bookings"), booking)
+    booking.id = docRef.id
+    addBookingToState(booking)
   } catch (error) {
     console.error("Can't add booking. Error: ", error)
   }
@@ -89,7 +98,7 @@ export async function deleteBooking(bookingID:string) {
   try {
     const bookingRef = doc(db, "bookings", bookingID)
     await deleteDoc(bookingRef)
-    await initBookings()
+    removeBookingFromState(bookingID)
   } catch (error) {
     console.error("Can't delete booking. Error: ", error)
   }

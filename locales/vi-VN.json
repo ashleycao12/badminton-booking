@@ -29,5 +29,7 @@
   "manage bookings": "Quản lý giờ sân",
   "yes": "Có",
   "no": "Không",
-  "delete booking confirmation text": "Bạn có chắc là muốn hủy giờ sân này?"
+  "delete booking confirmation text": "Bạn có chắc là muốn hủy giờ sân này?",
+  "full name": "Họ tên",
+  "invalid full name message": "Xin nhập tên ít nhất 2 chữ"
 }

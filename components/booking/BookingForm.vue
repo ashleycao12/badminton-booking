@@ -52,6 +52,7 @@
   const selectedPlayingTime = ref(1)
   const allowedPlayingTime = [1, 1.5, 2, 2.5, 3, 3.5, 4]
   const showErrMsg = ref(false)
+  const localePath = useLocalePath()
   
   function getAllStartHour(){
     const result = []
@@ -83,6 +84,8 @@
         continue
       }
 
+      //TODO if chosen date is today then filter out the passed hours
+
       const timeRangeToCheck = moment.range(startTime,endTime)
 
       courtLoop: for (const court of courts) {
@@ -111,7 +114,7 @@
     }
 
     showErrMsg.value = false
-
+    //TODO ask for confirmation before adding booking
     await addBooking({
       startTime: getDateTime(selectedDate.value, selectedHour.value),
       endTime: getDateTime(selectedDate.value, selectedHour.value + selectedPlayingTime.value),
@@ -119,7 +122,7 @@
       userId: firebaseUser.value.uid,
       createdAt: new Date()
     });
-    console.log("booking added");
+    navigateTo(localePath('/booking/mybookings'))
   }
 
   function handleHourSelection(hour:number) {

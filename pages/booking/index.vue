@@ -106,6 +106,10 @@
     populateTimetable()
   })
 
+  onMounted(()=>{
+    initBookings()
+  })
+
   function getBookingDivStyle(booking) {
     const bookingLengthInHours = (booking.endTime.getTime() - booking.startTime.getTime())/3600000
     let height = 0

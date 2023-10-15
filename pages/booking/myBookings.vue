@@ -50,19 +50,13 @@
   const showDeletePopup = ref(false)
   const bookingToDelete = ref<TBooking|null>(null)
   
-  watchEffect(()=>{
-    currentUserBookings.value = getCurrentUserBookings()
-    console.log(currentUserBookings.value);
-    currentUserBookings.value.sort((a:TBooking, b:TBooking) => a.startTime.getTime() - b.startTime.getTime())
-  })
-
   //TODO protect this route from unauthenticated users
-
+  
   function handleDelete(booking:TBooking){
     bookingToDelete.value = booking
     showDeletePopup.value = true
   }
-
+  
   async function handleDeleteConfirmation(confirmed:boolean){
     if (confirmed) {
       await deleteBooking(bookingToDelete.value.id)
@@ -70,6 +64,16 @@
     showDeletePopup.value = false
     bookingToDelete.value = null
   }
+  
+  watchEffect(()=>{
+    currentUserBookings.value = getCurrentUserBookings()
+    console.log(currentUserBookings.value);
+    currentUserBookings.value.sort((a:TBooking, b:TBooking) => a.startTime.getTime() - b.startTime.getTime())
+  })
+  
+  onMounted(()=>{
+    initBookings()
+  })
 
 </script>
 

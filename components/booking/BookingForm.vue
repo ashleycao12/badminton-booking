@@ -28,7 +28,7 @@
       </div>
       <button class="px-4 py-1 bg-blue-200 rounded-sm hover:bg-blue-400 float-right">{{$t('book')}}</button>
     </form>
-    <button @click="closeForm" class="absolute top-0 right-0 p-1">&#10006;</button>
+    <button @click="$emit('closePopup')" class="absolute top-0 right-0 p-1">&#10006;</button>
   </Popup>
 </template>
 
@@ -106,8 +106,6 @@
   }
 
   async function handleSubmit() {
-    console.log(selectedDate.value, selectedHour.value);
-
     if (selectedDate.value === null || selectedHour.value === 0) {
       showErrMsg.value = true
       return
@@ -145,12 +143,8 @@
     validStartHour.value = getValidStartTime()
   })
 
-  const emit = defineEmits(['closeForm'])
+  const emit = defineEmits(['closePopup'])
 
-  function closeForm() {
-    emit('closeForm')
-  }
-  
   function getFormatLocale() {
     return locale.value === 'vi-VN' ? vi : enNZ
   }

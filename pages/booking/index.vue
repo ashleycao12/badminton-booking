@@ -40,16 +40,19 @@
         <span>{{ $t('others bookings') }}</span>
       </div>
       <div>
-        <div class="w-5 h-5 bg-blue-300 inline-block mr-2">
+        <div class="w-5 h-5 bg-cyan-500 inline-block mr-2">
           &nbsp;
         </div>
         <span>{{ $t('my bookings') }}</span>
       </div>
 
-      <button class="px-4 py-2 text-xl bg-blue-200 rounded-sm hover:bg-blue-400 mt-5" @click="handleBook">{{$t('book')}}</button>
+      <button class="px-4 py-2 text-xl bg-cyan-700 rounded-md text-white hover:bg-cyan-600 mt-5" @click="handleBook">{{$t('book')}}</button>
     </div>
   </div>
-<BookingForm v-if="showBookingForm" @closeForm="closeBookingForm"/>
+
+  <BookingForm v-if="showBookingForm" @closePopup="showBookingForm = false"/>
+
+  <UnverifiedEmailAlert v-if="showUnverifiedEmailAlert" @closePopup ="showUnverifiedEmailAlert = false"/>
 </template>
 
 <script setup lang="ts">
@@ -61,6 +64,7 @@
   const bookings = ref([{startTime: new Date(0,0,0,0), endTime:new Date(0,0,0,0), userId: ''}])
   const hourRefs = ref([])
   const showBookingForm = ref(false)
+  const showUnverifiedEmailAlert = ref(false)
   
   function getHours() {
     const hours = []
@@ -91,14 +95,15 @@
     if (firebaseUser.value === null) {
       console.log('not login yet');
       return
-    } 
+    }
+    
+    if (firebaseUser.value.emailVerified === false){
+      showUnverifiedEmailAlert.value = true
+      return
+    }
 
     console.log('have logged in, id: ', firebaseUser.value.uid);
     showBookingForm.value = true
-  }
-
-  function closeBookingForm() {
-    showBookingForm.value = false
   }
 
   watchEffect(()=>{
@@ -129,7 +134,7 @@
     return ""
 
     if (booking.userId === firebaseUser.value.uid){
-      return "bg-blue-300"
+      return "bg-bg-cyan-500"
     }
     return "bg-red-300"
   }

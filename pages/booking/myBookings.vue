@@ -1,6 +1,7 @@
 <template>
   <div class="lg:w-1/2 mx-auto pt-16">
-    <h1 class="text-3xl font-bold mb-8 text-center text-cyan-900">{{ $t('my bookings') }}:</h1>
+    <h1 v-if="currentUserBookings.length === 0" class="text-xl">{{ $t('no booking message') }}</h1>
+    <h1 v-if="currentUserBookings.length > 0" class="text-3xl font-bold mb-8 text-center text-cyan-900">{{ $t('my bookings') }}:</h1>
     <ul class="flex flex-col gap-2">
       <li v-for="(booking, bookingIndex) in currentUserBookings" class="border border-blue-200 py-3 px-6 bg-white flex justify-between">
         <div>
@@ -45,12 +46,13 @@
 <script setup lang="ts">
   import { TBooking } from '~/composables/useTypes';
   
-  const currentUserBookings = ref<TBooking[]>()
+  const currentUserBookings = ref<TBooking[]>([])
   const {locale} = useI18n()
   const showDeletePopup = ref(false)
   const bookingToDelete = ref<TBooking|null>(null)
   
   //TODO protect this route from unauthenticated users
+  //TODO ask user to verify email if they have not
   
   function handleDelete(booking:TBooking){
     bookingToDelete.value = booking
@@ -67,7 +69,6 @@
   
   watchEffect(()=>{
     currentUserBookings.value = getCurrentUserBookings()
-    console.log(currentUserBookings.value);
     currentUserBookings.value.sort((a:TBooking, b:TBooking) => a.startTime.getTime() - b.startTime.getTime())
   })
   

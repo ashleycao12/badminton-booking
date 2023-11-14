@@ -1,7 +1,6 @@
 import {collection, getDocs, addDoc, updateDoc ,  getFirestore, doc, deleteDoc, query, where } from "firebase/firestore"
 import { TBooking } from "./useTypes"
-
-export const useAllBookings = () => useState("allBookings", () => [] as TBooking[])
+import { getAuth } from "firebase/auth"
 
 export async function initBookings() {
   //Get all future bookings and add to booking global state
@@ -15,19 +14,21 @@ export async function initBookings() {
   const result:TBooking[] = []
   const today = new Date()
   
-  today.setHours(0,0,0,0)
-  const q= query(bookingRef, where("startTime", ">=", today))
+  const q= query(bookingRef, where("endTime", ">=", today))
 
   try {
     const querySnapshot  = await getDocs(q)
     querySnapshot.forEach((doc) => {
+      const data = doc.data()
       result.push({
         id: doc.id,
-        startTime: new Date(doc.data().startTime.seconds*1000),
-        endTime: new Date(doc.data().endTime.seconds*1000),
-        userId: doc.data().userId,
-        court: doc.data().court,
-        createdAt: doc.data().createdAt
+        startTime: new Date(data.startTime.seconds*1000),
+        endTime: new Date(data.endTime.seconds*1000),
+        userId: data.userId,
+        userFullName:data.userFullName,
+        userPhoneNumber: data.userPhoneNumber,
+        court: data.court,
+        createdAt: data.createdAt
       })
     });
     allBookings.value = result
@@ -67,7 +68,7 @@ export function getCurrentUserBookings(){
 }
 
 
-export async function addBooking(booking:any){
+export async function addBooking(booking:TBooking){
   const db = getFirestore()
   try {
     const docRef = await addDoc(collection(db, "bookings"), booking)
@@ -104,14 +105,19 @@ export async function addUserPhoneNumber(userId:string, phoneNumber:string){
   }
 }
 
-export async function getUserPhoneNumberObj(userId:string){
+export async function initUserPhoneNumber(){
+  const phoneNumberObj = useUserPhoneNumberObj()
+  if (phoneNumberObj.value.docId !== '') {
+    return
+  }
+  const auth = getAuth()
   const db = getFirestore()
   const phoneRef = collection(db, "userPhoneNumbers")
-  const q = query(phoneRef, where("userId", "==", userId))
+  const q = query(phoneRef, where("userId", "==", auth.currentUser?.uid))
   try {
     const querySnapshot = await getDocs(q)
     //We need doc id to update phone number
-    return {
+    phoneNumberObj.value = {
       docId: querySnapshot.docs[0].id,
       phoneNumber:querySnapshot.docs[0].data().phoneNumber
     }
@@ -123,7 +129,9 @@ export async function getUserPhoneNumberObj(userId:string){
 export async function updatePhoneNumber(docId:string, phoneNumber:string) {
   const db = getFirestore()
   const phoneNumberDocRef = doc(db, "userPhoneNumbers", docId)
+  const phoneNumberObj = useUserPhoneNumberObj()
   await updateDoc(phoneNumberDocRef, {
     phoneNumber:phoneNumber
   })
+  phoneNumberObj.value.phoneNumber = phoneNumber
 }

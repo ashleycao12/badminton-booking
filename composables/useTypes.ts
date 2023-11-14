@@ -1,8 +1,10 @@
 export type TBooking = {
-  id: string,
+  id?: string,
   startTime: Date,
   endTime:Date,
-  userId: string,
   court:number,
-  createdAt: Date
+  userId: string,
+  userFullName: string,
+  userPhoneNumber:string
+  createdAt: Date,
 }

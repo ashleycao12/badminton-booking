@@ -1,6 +1,6 @@
 <template>
   <div class="lg:w-1/2 mx-auto pt-16">
-    <h1 v-if="currentUserBookings.length === 0" class="text-xl">{{ $t('no booking message') }}</h1>
+    <h1 v-if="currentUserBookings.length === 0" class="text-xl mx-4">{{ $t('no booking message') }}</h1>
     <h1 v-if="currentUserBookings.length > 0" class="text-3xl font-bold mb-8 text-center text-cyan-900">{{ $t('my bookings') }}:</h1>
     <ul class="flex flex-col gap-2">
       <li v-for="(booking, bookingIndex) in currentUserBookings" class="border border-blue-200 py-3 px-6 bg-white flex justify-between">
@@ -22,7 +22,7 @@
       </li>
     </ul>
   </div>
-  <Popup v-if="showDeletePopup" class="">
+  <Popup v-if="showDeletePopup">
     <p>{{ $t('delete booking confirmation text') }}</p>
     <div class="border w-2/3 mx-auto py-1 rounded-md border-cyan-600 my-2">
           <h2 class="text-lg font-semibold text-center">{{ bookingToDelete?.startTime.toLocaleString(locale, {weekday: "long", month: "numeric", day: "numeric"}) }}</h2>
@@ -41,6 +41,10 @@
       <button @click="handleDeleteConfirmation(false)" class="bg-cyan-200 hover:bg-cyan-500 px-4 py-1 rounded-sm">{{ $t('no') }}</button>
     </div>
   </Popup>
+
+  <Popup v-if="showDeclinePopUp" @closePopup="showDeclinePopUp = false">
+    <p>{{ $t('too late to cancel') }}</p>
+  </Popup>
 </template>
 
 <script setup lang="ts">
@@ -49,12 +53,15 @@
   const currentUserBookings = ref<TBooking[]>([])
   const {locale} = useI18n()
   const showDeletePopup = ref(false)
+  const showDeclinePopUp = ref(false)
   const bookingToDelete = ref<TBooking|null>(null)
   
-  //TODO protect this route from unauthenticated users
-  //TODO ask user to verify email if they have not
-  
   function handleDelete(booking:TBooking){
+    const thisMoment = new Date()
+    if (getDateTime(booking.startTime, booking.startTime.getHours() - minHourBeforeCancel).getTime() < thisMoment.getTime()){
+      showDeclinePopUp.value = true
+      return
+    }
     bookingToDelete.value = booking
     showDeletePopup.value = true
   }

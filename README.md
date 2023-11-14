@@ -1,3 +1,6 @@
+# Why client-side only
+The server-side elements of the website required paid subscription to be deployed. 
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.

@@ -66,11 +66,14 @@
     </form>
     
     <!-- check if user want to sign up instead  -->
-    <label class="mt-4">
+    <button @click="handleForgotPassword" class="my-5 text-sm underline">{{ $t('forgot password') }}</button>
+    <label>
       {{ $t('not yet have an account') }}?
       <button @click="toggleSignInSignUp" class="border rounded-md px-2 py-1">{{ $t('sign up') }}</button>
     </label>
   </div>
+
+  <ForgotPasswordForm v-if="showForgotPasswordForm" @closePopup="showForgotPasswordForm = false"/>
 
   <!-- Message for newly signed up users -->
   <div v-if="authenticated && !emailVerified" class="bg-white lg:w-1/3 mx-auto mt-12 rounded-md shadow-md shadow-gray-200 flex flex-col items-center p-8">
@@ -94,6 +97,7 @@
   const existingAccount = ref(true)
   const emailVerified = ref(false)
   const authenticated = ref(false)
+  const showForgotPasswordForm = ref(false)
 
   function handleSignUp(){
     if (password.value.length < 6) {
@@ -119,20 +123,30 @@
     // showNewUserMessage.value = true
   }
 
-async function handleSignIn(){
-  const user = await signInWithPassword(email.value, password.value)
-  if (authenticated && user?.emailVerified === true) {
-    navigateTo('/booking/mybookings')
-  } 
-  if (authenticated && user?.emailVerified === false) {
-    sendNewVerificationEmail()
+  async function handleSignIn(){
+    const user = await signInWithPassword(email.value, password.value)
+    const isAdmin = await getIsAdmin(user)
+    console.log('signing in. is admin:', isAdmin);
+    if (isAdmin){
+      navigateTo('/admin/booking')
+      return
+    }
+    if (user?.emailVerified === true) {
+      navigateTo('/booking/mybookings')
+      return
+    } 
+    if (user?.emailVerified === false) {
+      sendNewVerificationEmail()
+    }
   }
-}
 
   function toggleSignInSignUp(){
     existingAccount.value = !existingAccount.value
     authError.value.code =  ''
+  }
 
+  function handleForgotPassword(){
+    showForgotPasswordForm.value = true
   }
 
   watch(firebaseUser, () => {
@@ -145,8 +159,6 @@ async function handleSignIn(){
       email.value = firebaseUser.value.email
     }
   })
-
-  //TODO add middleware to redirect to homepage if user is already signed in
 
 </script>
 

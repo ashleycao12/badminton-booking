@@ -1,34 +1,45 @@
 <template>
-  <Popup>
-    <form @submit.prevent="handleSubmit" >
+  <Popup @closePopup="$emit('closePopup')">
+    <form @submit.prevent="handleSubmit">
       <p v-if="showErrMsg" class="text-red-500 italic">{{ $t('please select a time') }}</p>
-
-        <!-- Date Selection -->
-      <DatePicker class="my-4" v-model="selectedDate" id="date" :format-locale="formatLocale" format="dd/MM/yyyy" month-name-format="long" :min-date="new Date()" :max-date="dateOffset(new Date(), maxFutureDays)" :select-text="$t('select')" :cancel-text="$t('cancel')" :enable-time-picker="false"/>
+      
+      <!-- Date Selection -->
+      <DatePicker class="my-4" v-model="selectedDate" id="date" :format-locale="formatLocale" format="EEEE, dd/MM/yyyy" month-name-format="long" :min-date="new Date()" :max-date="dateOffset(new Date(), maxFutureDays)" :select-text="$t('select')" :cancel-text="$t('cancel')" :enable-time-picker="false"/>
+      
+      <!-- customer info fields for admin -->
+      <div v-if="isAdmin">
+        <label class="font-semibold w-full flex items-center gap-1">
+          {{ $t('booker') }}: 
+          <input required v-model="fullName" type="text" class="border rounded-md my-1 p-1 text-base font-normal text-black flex-grow">
+        </label>
+        <label class=" font-semibold w-full flex items-center gap-1">
+          {{ $t('phone number') }}: 
+          <input v-model="phoneNumber" type="text" class="border rounded-md my-1 p-1 text-base font-normal text-black flex-grow">
+        </label>
+      </div>
 
       <!-- Duriation selection -->
       <div class="my-4">
-        <label for="playingTime">{{ $t('playing time') }}:</label>
+        <label for="playingTime" class="font-semibold">{{ $t('playing time') }}:</label>
         <select name="playingTime" v-model="selectedPlayingTime" class="border mx-2 cursor-pointer">
           <option v-for="time in allowedPlayingTime" :value="time">
-            <span>{{ Math.floor(time) }} {{ $t('hour') }}</span>
+            <span> {{ Math.floor(time) }} {{ $t('hour') }}</span>
             <span v-if="time % 1 > 0"> 30 {{ $t('minute') }} </span>
           </option>
         </select>
       </div>
 
         <!-- Start time selection -->
-      <p>{{ $t('start time') }}:</p>
+      <p class="font-semibold">{{ $t('start time') }}:</p>
       <div class="grid grid-cols-6 gap-2 my-2">
-        <div v-for="hour in validStartHour" @click="handleHourSelection(hour)" class="p-1 bg-slate-200 text-center hover:bg-slate-400 flex cursor-pointer" :class="getHourStyle(hour)">
+        <div v-for="hour in validStartHour" @click="handleHourSelection(hour)" class="p-1 bg-slate-200 rounded-sm hover:bg-teal-300 flex justify-center cursor-pointer" :class="getHourStyle(hour)">
           {{Math.floor(hour)}}
           <span v-if="hour % 1 > 0">:30</span>
           <span v-else>:00</span>
         </div>
       </div>
-      <button class="px-4 py-1 bg-blue-200 rounded-sm hover:bg-blue-400 float-right">{{$t('book')}}</button>
+      <button class="px-4 py-1 bg-cyan-600 text-white font-semibold text-lg rounded-sm float-right">{{$t('book')}}</button>
     </form>
-    <button @click="$emit('closePopup')" class="absolute top-0 right-0 p-1">&#10006;</button>
   </Popup>
 </template>
 
@@ -43,7 +54,7 @@
   const firebaseUser:any = useFirebaseUser()
   const {locale} = useI18n()
   const formatLocale = getFormatLocale()
-  const selectedDate = ref(new Date())
+  const selectedDate = useSelectedDate()
   const selectedHour = ref(0)
   const defaultCourt = ref(new Map())
   const allStartHour = getAllStartHour()
@@ -52,7 +63,12 @@
   const selectedPlayingTime = ref(1)
   const allowedPlayingTime = [1, 1.5, 2, 2.5, 3, 3.5, 4]
   const showErrMsg = ref(false)
+  const isAdmin = useIsAdmin()
+  const fullName = ref('')
+  const phoneNumber = ref('')
+  const phoneNumberObj = useUserPhoneNumberObj()
   const localePath = useLocalePath()
+  const emit = defineEmits(['closePopup'])
   
   function getAllStartHour(){
     const result = []
@@ -74,6 +90,12 @@
 
     // Check all 4 courts to there is any available time with the selected length of each given start time options
     for (const startHour of allStartHour){
+      //If chosen date is today, filter out the passed hours. User has to book at least 1 hour ahead
+      const thisMoment = new Date()
+      if (isSameDate(selectedDate.value, thisMoment) && getDateTime(thisMoment, startHour- minHourBeforeBook).getTime() < thisMoment.getTime()){
+        continue
+      }
+
       const endHour = startHour+selectedPlayingTime.value
       const startTime = getDateTime(selectedDate.value, startHour)
       const endTime = getDateTime(selectedDate.value, endHour)
@@ -83,8 +105,6 @@
       if (endTime.getTime() > endOfDay.getTime()) {
         continue
       }
-
-      //TODO if chosen date is today then filter out the passed hours
 
       const timeRangeToCheck = moment.range(startTime,endTime)
 
@@ -111,13 +131,29 @@
       return
     }
 
-    showErrMsg.value = false
-    //TODO ask for confirmation before adding booking
+    if (isAdmin.value) {
+      await addBooking({
+      startTime: getDateTime(selectedDate.value, selectedHour.value),
+      endTime: getDateTime(selectedDate.value, selectedHour.value + selectedPlayingTime.value),
+      court: defaultCourt.value.get(selectedHour.value),
+      userId: 'added by admin',
+      userFullName:fullName.value,
+      userPhoneNumber: phoneNumber.value,
+      createdAt: new Date()
+      })
+      emit('closePopup')
+      return
+    }
+
+    const userPhoneNumber = phoneNumberObj.value.phoneNumber
+    //TODO ask for confirmation after adding booking
     await addBooking({
       startTime: getDateTime(selectedDate.value, selectedHour.value),
       endTime: getDateTime(selectedDate.value, selectedHour.value + selectedPlayingTime.value),
       court: defaultCourt.value.get(selectedHour.value),
       userId: firebaseUser.value.uid,
+      userFullName:firebaseUser.value.displayName,
+      userPhoneNumber: userPhoneNumber,
       createdAt: new Date()
     });
     navigateTo(localePath('/booking/mybookings'))
@@ -129,7 +165,7 @@
 
   function getHourStyle(hour:number){
     if (hour === selectedHour.value){
-      return "bg-slate-400"
+      return "bg-teal-400"
     }
     return ""
   }
@@ -143,16 +179,12 @@
     validStartHour.value = getValidStartTime()
   })
 
-  const emit = defineEmits(['closePopup'])
+  onMounted(async () => {
+    await initUserPhoneNumber()
+  })
 
   function getFormatLocale() {
     return locale.value === 'vi-VN' ? vi : enNZ
-  }
-
-  function getDateTime(date:Date, hour:number){
-    const result = new Date(date)
-    result.setHours(0,hour*60,0,0)
-    return result
   }
 
 </script>

@@ -15,3 +15,9 @@ export function dateOffset(date:Date, dateOffsetNumber:number){
 
   return new Date(y,m,d)
 }
+
+export function getDateTime(date:Date, hour:number){
+  const result = new Date(date)
+  result.setHours(0,hour*60,0,0)
+  return result
+}

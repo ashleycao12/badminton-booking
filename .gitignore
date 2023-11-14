@@ -27,3 +27,5 @@ logs
 .github
 firebase.json
 .firebaserc
+
+makeAdmin.js

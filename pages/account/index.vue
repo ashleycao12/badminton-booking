@@ -1,5 +1,5 @@
 <template> 
-  <div class="bg-white lg:w-1/3 mx-auto mt-12 rounded-md shadow-md shadow-gray-200 flex flex-col items-center py-10">
+  <div class="bg-white lg:w-1/3 mx-3 lg:mx-auto mt-12 rounded-md shadow-md shadow-gray-200 flex flex-col items-center py-10">
     <h1 class=" text-lg font-bold mb-4">{{ $t('account info') }}</h1>
     <form @submit.prevent="" class="w-2/3 border-b-2 pb-5">
       <div class="flex flex-col gap-5">
@@ -19,7 +19,7 @@
     </form>
     <div class="w-2/3 grid gap-3 mt-5">
       <button v-if="!editting" @click="handleEditClick" class="hover:bg-cyan-600 border-2 border-cyan-600 hover:text-white py-1 font-semibold px-2 rounded-full text-sm">{{ $t('edit details') }}</button>
-      <button v-if="!editting" class="hover:bg-cyan-600 border-2 border-cyan-600 hover:text-white py-1 font-semibold px-2 rounded-full text-sm">{{ $t('change password') }}</button>
+      <button v-if="!editting" @click="showChangePasswordForm = true" class="hover:bg-cyan-600 border-2 border-cyan-600 hover:text-white py-1 font-semibold px-2 rounded-full text-sm">{{ $t('change password') }}</button>
       <button v-if="!editting" class="hover:bg-cyan-600 border-2 border-cyan-600 hover:text-white py-1 font-semibold px-2 rounded-full text-sm" @click="signOut">{{ $t('sign out') }}</button>
     </div>
     <div class="flex gap-2">
@@ -27,6 +27,8 @@
       <button v-if="editting" @click="handleCancel" class="hover:bg-cyan-600 border-2 border-cyan-600 hover:text-white py-1 font-semibold px-2 rounded-full text-sm">{{ $t('cancel') }}</button>
     </div>
   </div>
+
+  <ChangePasswordForm v-if="showChangePasswordForm" @closePopup="showChangePasswordForm = false"/>
 </template>
 
 <script setup lang="ts">
@@ -36,11 +38,14 @@
   const fullName = ref('')
   const phoneNumber = ref('')
   const {$firebaseApp} = useNuxtApp()
+  const isAdmin = useIsAdmin()
+  const showChangePasswordForm = ref(false)
 
   // to compared if phone number changed before update or fetch from firebase
-  const storedPhoneNumber = ref('')
+  // const userPhoneNumber = useUserPhoneNumber()
+
   //to store phoneNumber document id to update it
-  const phoneNumberObj = ref<{docId:string, phoneNumber:string}>({docId:'', phoneNumber:''})
+  const phoneNumberObj = useUserPhoneNumberObj()
 
   function signOut() {
     signUserOut()
@@ -56,9 +61,8 @@
   }
 
   async function handleSubmitChanges(){
-    if (phoneNumber.value !== storedPhoneNumber.value){
+    if (phoneNumber.value !== phoneNumberObj.value.phoneNumber){
       updatePhoneNumber(phoneNumberObj.value.docId, phoneNumber.value)
-      storedPhoneNumber.value = phoneNumber.value
       console.log('change phoneNumber');
     }
 
@@ -72,20 +76,23 @@
     editting.value = false
     email.value = firebaseUser.value.email
     fullName.value = firebaseUser.value.displayName
-    phoneNumber.value = storedPhoneNumber.value
+    phoneNumber.value = phoneNumberObj.value.phoneNumber
   }
 
-  //TODO add changePassword function
-
   watchEffect(async ()=>{
+    // set layout for admin user
+    if (isAdmin.value){
+      setPageLayout('admin')
+    }
     // have to track if firebaseApp is initialised before trying to get phone number
     if (firebaseUser.value && $firebaseApp){
       email.value = firebaseUser.value.email
       fullName.value = firebaseUser.value.displayName
-      phoneNumberObj.value = await getUserPhoneNumberObj(firebaseUser.value.uid)
-      storedPhoneNumber.value = phoneNumberObj.value.phoneNumber
-      phoneNumber.value = storedPhoneNumber.value
-    } 
+      await initUserPhoneNumber()
+      // phoneNumberObj.value = await getUserPhoneNumberObj(firebaseUser.value.uid)
+      // userPhoneNumber.value = phoneNumberObj.value.phoneNumber
+      phoneNumber.value = phoneNumberObj.value.phoneNumber
+    }
   })
 
 

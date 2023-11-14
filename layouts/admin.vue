@@ -2,7 +2,9 @@
   <div class="bg-white border-b">
     <header>
       <div class="flex flex-col md:flex-row items-center md:items-end md:px-10 py-2">
-        <img class="w-72" src="/logo.jpg" alt="">
+        <NuxtLink :to="localePath('/')">
+          <img class="w-72" src="/logo.jpg" alt="">
+        </NuxtLink>
         <div class="grow flex justify-end">
           <nav class="">
             <NuxtLink class="rounded-sm px-2 py-2 md:px-9 md:text-2xl" :to="localePath('/')">{{ $t('home') }}</NuxtLink>

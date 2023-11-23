@@ -6,7 +6,8 @@
   const firebaseuser = useFirebaseUser()
   watchEffect(()=>{
     if (firebaseuser.value){
-      navigateTo('/account')
+      const localePath = useLocalePath()
+      navigateTo(localePath('/account'))
     }
   })
 </script>

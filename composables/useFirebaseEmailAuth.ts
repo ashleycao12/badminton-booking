@@ -53,17 +53,14 @@ export async function initUser(){
   const firebaseUser = useFirebaseUser()
   const isAdmin = useIsAdmin()
   firebaseUser.value = auth.currentUser as any
-  console.log(firebaseUser.value);
   
   onAuthStateChanged(auth, async (user) => {
     firebaseUser.value = user as any
-    console.log(firebaseUser.value);
     if (user){
       const idTokenResult = await firebaseUser.value.getIdTokenResult()
       if (idTokenResult.claims.admin === true){
         isAdmin.value = true
       }
-      console.log('is admin:',  isAdmin.value);
     }
   })
 }

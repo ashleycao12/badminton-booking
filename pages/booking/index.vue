@@ -1,9 +1,9 @@
 <template>
-  <div class="py-10 flex justify-center flex-col md:flex-row">
-    <BookingTimetable/>
-    
-    <div class="px-8 flex flex-col gap-2 mt-10">
-      <button class=" py-2 text-xl bg-cyan-700 rounded-md text-white hover:bg-cyan-600 mb-5" @click="handleBook">{{$t('book')}}</button>
+  <p class="text-center italic my-5 md:my-10">{{ $t('check calendar and press book to add booking') }}</p>
+  
+  <div class=" flex justify-center flex-col md:flex-row gap-8">
+    <div class="px-8 flex flex-col gap-2 mt-2 md:mt-8">
+      <button class=" py-2 mb-2 text-xl bg-cyan-700 rounded-md text-white hover:bg-cyan-600" @click="handleBook">{{$t('book')}}</button>
 
       <!-- timetable legends -->
       <div>
@@ -24,23 +24,29 @@
         </div>
         <span>{{ $t('my bookings') }}</span>
       </div>
-
     </div>
+
+    <BookingTimetable class=""/>
+    
   </div>
 
   <BookingForm v-if="showBookingForm" @closePopup="showBookingForm = false"/>
 
   <UnverifiedEmailAlert v-if="showUnverifiedEmailAlert" @closePopup ="showUnverifiedEmailAlert = false"/>
+  <Popup v-if="showNotLoggedInAlert" @closePopup="showNotLoggedInAlert = false">
+    {{$t('please sign in to use booking feature')}}
+  </Popup>
 </template>
 
 <script setup lang="ts">
   const firebaseUser = useFirebaseUser()
   const showBookingForm = ref(false)
   const showUnverifiedEmailAlert = ref(false)
+  const showNotLoggedInAlert = ref(false)
 
   function handleBook() {
     if (firebaseUser.value === null) {
-      console.log('not login yet');
+      showNotLoggedInAlert.value = true
       return
     }
     
@@ -49,7 +55,6 @@
       return
     }
 
-    console.log('have logged in, id: ', firebaseUser.value.uid);
     showBookingForm.value = true
   }
 

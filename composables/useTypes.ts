@@ -6,5 +6,5 @@ export type TBooking = {
   userId: string,
   userFullName: string,
   userPhoneNumber:string
-  createdAt: Date,
+  expiryDate: Date,
 }

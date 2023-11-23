@@ -139,7 +139,7 @@
       userId: 'added by admin',
       userFullName:fullName.value,
       userPhoneNumber: phoneNumber.value,
-      createdAt: new Date()
+      expiryDate: dateOffset(new Date(), TTLDays)
       })
       emit('closePopup')
       return
@@ -154,7 +154,7 @@
       userId: firebaseUser.value.uid,
       userFullName:firebaseUser.value.displayName,
       userPhoneNumber: userPhoneNumber,
-      createdAt: new Date()
+      expiryDate: dateOffset(new Date(), TTLDays)
     });
     navigateTo(localePath('/booking/mybookings'))
   }

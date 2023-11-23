@@ -33,7 +33,6 @@
     } else {
       authenticated.value = true
     }
-    console.log({authenticated: authenticated.value});
   })
 
   //TODO add loading screen

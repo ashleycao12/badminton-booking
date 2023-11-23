@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build && node addTranslation.js",
+    "build": "nuxt build && nuxt generate",
     "dev": "nuxt dev && node addTranslation.js",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

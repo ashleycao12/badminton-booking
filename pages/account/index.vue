@@ -40,6 +40,7 @@
   const {$firebaseApp} = useNuxtApp()
   const isAdmin = useIsAdmin()
   const showChangePasswordForm = ref(false)
+  const localePath = useLocalePath()
 
   // to compared if phone number changed before update or fetch from firebase
   // const userPhoneNumber = useUserPhoneNumber()
@@ -49,7 +50,7 @@
 
   function signOut() {
     signUserOut()
-    navigateTo('/')
+    navigateTo(localePath('/'))
   }
 
   function handleEditClick(){
@@ -63,7 +64,6 @@
   async function handleSubmitChanges(){
     if (phoneNumber.value !== phoneNumberObj.value.phoneNumber){
       updatePhoneNumber(phoneNumberObj.value.docId, phoneNumber.value)
-      console.log('change phoneNumber');
     }
 
     if (fullName.value !== firebaseUser.value.displayName) {

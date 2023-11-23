@@ -98,6 +98,7 @@
   const emailVerified = ref(false)
   const authenticated = ref(false)
   const showForgotPasswordForm = ref(false)
+  const localePath = useLocalePath()
 
   function handleSignUp(){
     if (password.value.length < 6) {
@@ -126,13 +127,12 @@
   async function handleSignIn(){
     const user = await signInWithPassword(email.value, password.value)
     const isAdmin = await getIsAdmin(user)
-    console.log('signing in. is admin:', isAdmin);
     if (isAdmin){
-      navigateTo('/admin/booking')
+      navigateTo(localePath('/admin/booking'))
       return
     }
     if (user?.emailVerified === true) {
-      navigateTo('/booking/mybookings')
+      navigateTo(localePath('/booking/mybookings'))
       return
     } 
     if (user?.emailVerified === false) {

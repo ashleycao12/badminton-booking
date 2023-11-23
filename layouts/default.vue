@@ -34,7 +34,6 @@
     } else {
       authenticated.value = true
     }
-    console.log({authenticated: authenticated.value});
   })
 </script>
 

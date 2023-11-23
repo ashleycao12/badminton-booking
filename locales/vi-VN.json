@@ -69,7 +69,9 @@
   "message for new user continue": "Kiểm tra hộp thư của bạn (kể cả mục thư rác) và nhấn vào đường link để xác nhận email.",
   "resend email": "Gửi lại email",
   "unverified email message": "Vui lòng xác nhận email của bạn để đặt sân. Kiểm tra hộp thư của bạn (kể cả mục thư rác). Tìm email tựa đề \"Xác nhận email của bạn cho sân cầu lông Phước Thiện\" và nhấn vào đường link để xác nhận email. Nếu đường link hết hạn hoặc không tìm thấy email, nhấn nút bên dưới để gửi lại email.",
+  "please sign in to use booking feature": "Vui lòng đăng nhập để đặt sân",
   "click on the calendar icon to for details": "Nhấn vào biểu tượng lịch để xem chi tiết",
   "too late to cancel": "Không thể hủy do giờ quá cận. Làm ơn gọi điện vào số điện thoại ở trang chủ để hủy.",
+  "check calendar and press book to add booking": "Xem lịch và nhấn nút Đặt để đặt sân",
   "booking added": "Giờ sân đã đặt thành công"
 }

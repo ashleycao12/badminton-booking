@@ -52,7 +52,6 @@
 
   onMounted(()=>{
     initBookings()
-    console.log(bookings.value);
     if (props.initalDate){
       date.value = props.initalDate
     }

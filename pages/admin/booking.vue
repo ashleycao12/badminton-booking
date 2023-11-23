@@ -97,7 +97,6 @@
   function showBookingInfo(bookingData:TBooking){
     showBookingInfoRef.value = true
     bookingByDate.value = bookingData
-    console.log(bookingData);
   }
 
   async function handleDeleteConfirmation(confirmed:boolean){

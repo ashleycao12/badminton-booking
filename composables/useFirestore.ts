@@ -28,11 +28,10 @@ export async function initBookings() {
         userFullName:data.userFullName,
         userPhoneNumber: data.userPhoneNumber,
         court: data.court,
-        createdAt: data.createdAt
+        expiryDate: data.expiryDate
       })
     });
     allBookings.value = result
-    console.log(allBookings.value);
   } catch (error) {
     console.error("Can't init bookings. Error: ", error)
   }

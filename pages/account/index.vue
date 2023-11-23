@@ -42,9 +42,6 @@
   const showChangePasswordForm = ref(false)
   const localePath = useLocalePath()
 
-  // to compared if phone number changed before update or fetch from firebase
-  // const userPhoneNumber = useUserPhoneNumber()
-
   //to store phoneNumber document id to update it
   const phoneNumberObj = useUserPhoneNumberObj()
 
@@ -89,8 +86,6 @@
       email.value = firebaseUser.value.email
       fullName.value = firebaseUser.value.displayName
       await initUserPhoneNumber()
-      // phoneNumberObj.value = await getUserPhoneNumberObj(firebaseUser.value.uid)
-      // userPhoneNumber.value = phoneNumberObj.value.phoneNumber
       phoneNumber.value = phoneNumberObj.value.phoneNumber
     }
   })

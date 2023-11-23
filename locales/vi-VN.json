@@ -55,6 +55,7 @@
   "auth/missing-password": "Thiếu mật khẩu",
   "auth/wrong-password": "Sai mật khẩu",
   "auth/user-not-found": "Không tìm được tài khoản với email này. Kiểm tra chính ta hoặc đăng kí nếu bạn chưa có tài khoản.",
+  "auth/email-already-in-use": "Tài khoản đã tồn tài. Vui lòng đăng nhập",
   "password too short": "Mật khẩu phải ít nhất 6 ký tự",
   "password confirmation mismatch": "Mật khẩu xác nhận không khớp",
   "already had an account": "Đã có tài khoản",

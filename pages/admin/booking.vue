@@ -117,12 +117,10 @@
   }
 
   function getButtonClass(buttonName:string){
-    // if (calendarView.value){
     if ((buttonName === 'calendar' && calendarView.value) || (buttonName === 'number' &&  !calendarView.value)){
       return "bg-white"
     }
     return "text-white"
-    // return "ring-2 ring-sky-400 ring-inset bg-white"
   }
 
   watchEffect(() => {

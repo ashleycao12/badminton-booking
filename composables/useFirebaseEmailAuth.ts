@@ -123,5 +123,6 @@ const handledAuthErrMsgs = [
   'auth/invalid-email',
   'auth/wrong-password',
   'auth/invalid-email',
-  'auth/user-not-found'
+  'auth/user-not-found',
+  'auth/email-already-in-use'
 ]

@@ -121,7 +121,7 @@
       return
     }
     createAccount(email.value, password.value, fullName.value, phoneNumber.value)
-    // showNewUserMessage.value = true
+    navigateTo(localePath('/booking'))
   }
 
   async function handleSignIn(){

@@ -5,7 +5,7 @@ https://caulong-phuocthien.web.app/en-nz/
 # Purpose
 
 - Let customers of Phuoc Thien badminton court hiring service see available time, create and delete their own bookings
-- Let admin users see booking details including customers' info. Admins can create and delete any bookings/
+- Let admin users see booking details including customers' info. Admins can create and delete any bookings
 
 # Features
 

@@ -1,66 +1,23 @@
-# Why client-side only
-The server-side elements of the website required paid subscription to be deployed. 
+# Deployed site
 
-# Nuxt 3 Minimal Starter
+https://caulong-phuocthien.web.app/en-nz/
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# Purpose
 
-## Setup
+- Let customers of Phuoc Thien badminton court hiring service see available time, create and delete their own bookings
+- Let admin users see booking details including customers' info. Admins can create and delete any bookings/
 
-Make sure to install the dependencies:
+# Features
 
-```bash
-# npm
-npm install
+- Mobile responsive
+- 2 Languagues. Default Vietnamese URL: https://caulong-phuocthien.web.app/
 
-# pnpm
-pnpm install
+# Technology
 
-# yarn
-yarn install
-```
+- Nuxt 3
+- Firebase
+- i18n
 
-## Development Server
+# Limitation
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Using free firebase subscription so no access to cloud functions and some other features.

@@ -1,5 +1,5 @@
 export function getShortName(fullName:string){
-  if (fullName === ''){
+  if (!fullName){
     return fullName
   }
 

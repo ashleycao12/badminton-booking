@@ -10,11 +10,11 @@
         <tbody>
           <tr>
             <th class=" border border-gray-400"></th>
-            <th v-for="court in courts" class=" w-24">
+            <th v-for="court in courts" :key="court" class=" w-24">
               <p class="text-gray-600 font-semibold text-sm">{{$t('court')}} {{court}}</p>
             </th>
           </tr>
-          <tr v-for="hour in hours" class="h-10" ref="hourRefs">
+          <tr v-for="hour in hours" :key="hour" class="h-10" ref="hourRefs">
             <td class="px-3 block leading-none text-sm font-semibold text-gray-700 border-none" > {{ hour }}:00 </td>
             <td v-for="court in courts" class="border relative border-gray-400" :class="getCellColour(hour)">
               <!-- booking render for non-admin -->
@@ -35,8 +35,8 @@
 
 <script setup lang="ts">
   const {locale} = useI18n()
-  const hours: number[] = getHours()  
   const date = useSelectedDate()
+  const hours = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
   const bookingMap = ref(new Map())
   const bookings = ref([{startTime: new Date(0,0,0,0), endTime:new Date(0,0,0,0), userId: ''}])
   const hourRefs = ref([])
@@ -64,13 +64,13 @@
     date.value = new Date(y,m,d)
   }
 
-  function getHours() {
-    const hours = []
-    for (let i = openingTime; i < closingTime; i++) {
-      hours.push(i)
-    }
-    return hours
-  }
+  // function getHours() {
+  //   const hours = []
+  //   for (let i = openingTime; i < closingTime; i++) {
+  //     hours.push(i)
+  //   }
+  //   return hours
+  // }
 
   function getBookingDivStyle(booking) {
     const bookingLengthInHours = (booking.endTime.getTime() - booking.startTime.getTime())/3600000

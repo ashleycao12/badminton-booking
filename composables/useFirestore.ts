@@ -32,6 +32,7 @@ export async function initBookings() {
       })
     });
     allBookings.value = result
+    console.log(allBookings.value);
   } catch (error) {
     console.error("Can't init bookings. Error: ", error)
   }
@@ -43,13 +44,16 @@ export function getBookingsByDate(date:Date) {
   }
   const date2 = new Date(date)
   date2.setHours(0,0,0,0)
+  const closingDateTime = new Date(date)
+  closingDateTime.setHours(closingTime,0,0,0)
   const result:TBooking[] = []
   const allBookings = useAllBookings()
 
   allBookings.value.forEach(booking => {
     const bookingDate = new Date(booking.startTime)
     bookingDate.setHours(0,0,0,0)
-    if (bookingDate.getTime() === date2.getTime()) {
+    
+    if (bookingDate.getTime() === date2.getTime() && booking.endTime.getTime() <= closingDateTime.getTime()) {
       result.push({...booking})
     }
   })

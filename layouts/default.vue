@@ -3,7 +3,7 @@
     <header>
       <div class="flex flex-col md:flex-row items-center md:items-end md:px-10 py-2">
         <NuxtLink :to="localePath('/')">
-          <img class="w-72" src="/logo.jpg" alt="">
+          <img class="w-72" src="/pickleball-logo.jpg" alt="">
         </NuxtLink>
         <div class="grow flex justify-end">
           <nav class="">
